@@ -1,0 +1,278 @@
+{% extends 'MainApp/base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+{% if form.instance.pk %}
+Modify Broadcast "{{ form.instance.title }}" - Campus Skillswap
+{% else %}
+Initiate New Broadcast - Campus Skillswap
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card border-0" style="background: rgba(255,255,255,0.02); box-shadow: 0 0 40px rgba(112, 0, 255, 0.05);">
+            <div class="card-header border-bottom border-secondary pt-5 pb-4 px-4 px-lg-5" style="background: transparent;">
+                <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    {% if form.instance.pk %}
+                    Modify Skill Parameters
+                    {% else %}
+                    Initialize Broadcast
+                    {% endif %}
+                </h2>
+                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Define Skillset Metadata</p>
+            </div>
+            
+            <div class="card-body p-4 p-lg-5">
+                <!-- Form Instructions -->
+                <div class="p-4 rounded-4 mb-5" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.2);">
+                    <h5 style="color: var(--secondary-neon); font-weight: 700;" class="mb-3">💡 Transmission Guidelines:</h5>
+                    <ul class="mb-0 text-muted small" style="list-style-type: '⚡ '; padding-left: 20px;">
+                        <li class="mb-2">Define clear parameters for your peer-to-peer exchange.</li>
+                        <li class="mb-2">Specify your expertise level in the data payload.</li>
+                        <li class="mb-2">Ensure your valuation (pricing) is network-standard.</li>
+                        <li>Maintain your status signal for accurate grid detection.</li>
+                    </ul>
+                </div>
+
+                <!-- Skill Form -->
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Title Field -->
+                    <div class="mb-5">
+                        <label for="{{ form.title.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
+                            📌 Designation *
+                        </label>
+                        {{ form.title }}
+                        <div class="form-text text-muted mt-2" style="font-size: 0.8rem; opacity: 0.6;">
+                            Identifier for the skill. Example: "Advanced Neural Net Architect"
+                        </div>
+                        {% if form.title.errors %}
+                        <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                            {{ form.title.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="mb-5">
+                        <label for="{{ form.description.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
+                            📝 Data Payload *
+                        </label>
+                        {{ form.description }}
+                        <div class="form-text text-muted mt-2" style="font-size: 0.8rem; opacity: 0.6;">
+                            Describe the core knowledge transfer protocols.
+                        </div>
+                        {% if form.description.errors %}
+                        <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                            {{ form.description.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Category Field -->
+                    <div class="mb-5">
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📂 Logic Sector *</label>
+                        <div class="row g-3">
+                            {% for value, label in form.category.field.choices %}
+                            <div class="col-md-6">
+                                <div class="form-check p-0">
+                                    <input type="radio" name="category" value="{{ value }}" id="id_category_{{ value }}" 
+                                        {% if form.category.value == value %}checked{% endif %} 
+                                        class="btn-check" required>
+                                    <label class="btn btn-outline-light w-100 text-start d-flex align-items-center" for="id_category_{{ value }}" style="border-radius: 12px; padding: 0.75rem 1rem; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
+                                        <span class="dot" style="width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-right: 12px;"></span>
+                                        {{ label }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.category.errors %}
+                        <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                            {{ form.category.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Pricing Section -->
+                    <div class="p-4 rounded-4 mb-5" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <h5 class="mb-4 text-white" style="font-weight: 700;">💰 Valuation Model</h5>
+
+                        <!-- Free Option -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                {{ form.is_free }}
+                                <label class="form-check-label text-muted" for="{{ form.is_free.id_for_label }}">
+                                    Open-Source (Free Exchange)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Price Field -->
+                        <div id="priceField">
+                            <label for="{{ form.price.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
+                                Network Credits / Session
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text border-0" style="background: rgba(0,0,0,0.4); color: var(--secondary-neon);">$</span>
+                                {{ form.price }}
+                            </div>
+                            {% if form.price.errors %}
+                            <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                                {{ form.price.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Contact Preference -->
+                    <div class="mb-5">
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📧 Comm Protocol *</label>
+                        <div class="row g-3">
+                            {% for value, label in form.contact_preference.field.choices %}
+                            <div class="col-md-6">
+                                <input type="radio" name="contact_preference" value="{{ value }}"
+                                    id="id_contact_preference_{{ value }}" {% if form.contact_preference.value == value %}checked{% endif %} 
+                                    class="btn-check" required>
+                                <label class="btn btn-outline-light w-100 text-start d-flex align-items-center" for="id_contact_preference_{{ value }}" style="border-radius: 12px; padding: 0.75rem 1rem; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
+                                    {{ label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.contact_preference.errors %}
+                        <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                            {{ form.contact_preference.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Availability Status -->
+                    <div class="mb-5">
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📅 Network Presence *</label>
+                        <div class="row g-3">
+                            {% for value, label in form.availability.field.choices %}
+                            <div class="col-md-4">
+                                <input type="radio" name="availability" value="{{ value }}"
+                                    id="id_availability_{{ value }}" {% if form.availability.value == value %}checked{% endif %} 
+                                    class="btn-check" required>
+                                <label class="btn btn-outline-light w-100 text-center" for="id_availability_{{ value }}" style="border-radius: 12px; padding: 0.75rem 1rem; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
+                                    {{ label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.availability.errors %}
+                        <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
+                            {{ form.availability.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Form Errors (General) -->
+                    {% if form.non_field_errors %}
+                    <div class="alert mb-5" style="background: rgba(255, 0, 85, 0.1); border: 1px solid rgba(255, 0, 85, 0.3); border-radius: 12px; color: var(--accent-glow);">
+                        <strong>System Error:</strong> {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Submit Buttons -->
+                    <div class="d-grid gap-3 d-md-flex justify-content-md-end mt-5">
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-light px-5" style="border-radius: 12px;">
+                            Abort
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5" style="border-radius: 12px; box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
+                            {% if form.instance.pk %}
+                            Sync Changes
+                            {% else %}
+                            Execute Broadcast
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling for the custom inputs inside form */
+    .card-body input[type="text"], 
+    .card-body input[type="number"], 
+    .card-body textarea {
+        border-radius: 12px !important; 
+        background: rgba(0,0,0,0.4) !important; 
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: white !important;
+        padding: 0.8rem 1.2rem !important;
+    }
+    .card-body input:focus, 
+    .card-body textarea:focus {
+        border-color: var(--secondary-neon) !important;
+        box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.15) !important;
+    }
+    
+    .btn-check:checked + .btn-outline-light {
+        background: rgba(112, 0, 255, 0.15) !important;
+        border-color: var(--primary-neon) !important;
+        color: white !important;
+        box-shadow: 0 0 15px rgba(112, 0, 255, 0.2);
+    }
+    
+    .btn-check:checked + .btn-outline-light .dot {
+        background: var(--primary-neon) !important;
+        box-shadow: 0 0 10px var(--primary-neon);
+    }
+    
+    .form-switch .form-check-input {
+        width: 3rem;
+        height: 1.5rem;
+        background-color: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .form-switch .form-check-input:checked {
+        background-color: var(--primary-neon);
+        border-color: var(--primary-neon);
+    }
+</style>
+
+<script>
+    // Show/hide price field based on is_free checkbox
+    document.addEventListener('DOMContentLoaded', function () {
+        const isFreeCheckbox = document.querySelector('#id_is_free');
+        const priceField = document.getElementById('priceField');
+
+        function togglePriceField() {
+            if (isFreeCheckbox) {
+                priceField.style.display = isFreeCheckbox.checked ? 'none' : 'block';
+                priceField.style.opacity = isFreeCheckbox.checked ? '0' : '1';
+                priceField.style.transition = 'all 0.3s ease';
+            }
+        }
+
+        if (isFreeCheckbox) {
+            isFreeCheckbox.addEventListener('change', togglePriceField);
+            togglePriceField(); // Initial state
+        }
+    });
+
+    // Form validation
+    (function () {
+        'use strict';
+        const form = document.querySelector('.needs-validation');
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,269 @@
+{% extends 'MainApp/base.html' %}
+
+{% block title %}{{ skill.title }} - Campus Skillswap{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Main Skill Details -->
+    <div class="col-lg-8">
+        <div class="card mb-4 border-0" style="background: rgba(255,255,255,0.02);">
+            <div class="card-body p-4 p-lg-5">
+                <!-- Skill Header -->
+                <div class="mb-5 border-bottom border-secondary pb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="skill-category">{{ skill.get_category_display }}</span>
+                        <span class="ms-auto" style="font-family: monospace; font-size: 0.8rem; color: var(--text-secondary); opacity: 0.5;">ID: {{ skill.pk|stringformat:"04d" }}</span>
+                    </div>
+                    <h1 class="mb-3" style="font-weight: 900; font-size: 3rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ skill.title }}</h1>
+
+                    <!-- Owner Information -->
+                    <div class="user-badge mb-3">
+                        <span>👤</span>
+                        <strong style="margin-left: 6px; color: #fff;">{{ skill.owner.get_full_name|default:skill.owner.username }}</strong>
+                    </div>
+
+                    <!-- Posted Date -->
+                    <div class="text-muted" style="font-size: 0.85rem;">
+                        <span style="opacity: 0.7;">System Record:</span> {{ skill.created_at|date:"F d, Y" }} at {{ skill.created_at|time:"g:i A" }}
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <!-- Pricing -->
+                        <div class="p-4 rounded-4 h-100" style="background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), transparent); border: 1px solid rgba(0, 229, 255, 0.2);">
+                            <h5 class="mb-3" style="color: var(--secondary-neon); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">💰 Value Exchange</h5>
+                            {% if skill.is_free %}
+                            <h3 class="text-success" style="font-weight: 900; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">FREE</h3>
+                            <p class="mb-0 text-muted small">This knowledge is offered free of charge.</p>
+                            {% else %}
+                            <h3 class="text-success" style="font-weight: 900; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">${{ skill.price }}</h3>
+                            <p class="mb-0 text-muted small">Per cycle / session</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <!-- Availability Status -->
+                        <div class="p-4 rounded-4 h-100" style="background: linear-gradient(135deg, rgba(112, 0, 255, 0.05), transparent); border: 1px solid rgba(112, 0, 255, 0.2);">
+                            <h5 class="mb-3" style="color: #b580ff; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">📅 Status</h5>
+                            {% if skill.availability == 'available' %}
+                            <span class="badge bg-success fs-6 mb-2 text-uppercase">Online</span>
+                            <p class="mb-0 text-muted small">Available for incoming connections.</p>
+                            {% elif skill.availability == 'busy' %}
+                            <span class="badge bg-warning fs-6 mb-2 text-uppercase">Busy</span>
+                            <p class="mb-0 text-muted small">Processing current queue. Delays expected.</p>
+                            {% else %}
+                            <span class="badge bg-secondary fs-6 mb-2 text-uppercase">Offline</span>
+                            <p class="mb-0 text-muted small">Connection refused at this time.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Description -->
+                <div class="mb-5">
+                    <h4 class="mb-4" style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;">📝 Data Payload</h4>
+                    <div class="p-4 rounded-4" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); font-weight: 300; line-height: 1.8; color: #cbd5e1;">
+                        {{ skill.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Last Updated -->
+                {% if skill.created_at != skill.updated_at %}
+                <div class="d-inline-block px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.05); font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <span class="text-muted">Last sync: {{ skill.updated_at|date:"F d, Y" }}</span>
+                </div>
+                {% endif %}
+
+                <hr class="my-5" style="opacity: 0.1;">
+
+                <!-- Reviews Section -->
+                <div class="reviews-section">
+                    <h4 class="mb-4" style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;">⭐ Peer Feedback ({{ skill.reviews.count }})</h4>
+
+                    {% if user.is_authenticated %}
+                        {% if user != skill.owner %}
+                            {% if not user_has_reviewed %}
+                                <div class="card mb-5 border-0" style="background: linear-gradient(to right, rgba(112, 0, 255, 0.05), transparent); border-left: 2px solid var(--primary-neon) !important; border-radius: 0 16px 16px 0;">
+                                    <div class="card-body p-4">
+                                        <h5 class="mb-3 text-white" style="font-weight: 700;">Transmit Feedback</h5>
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">Rating</label>
+                                                {{ review_form.rating }}
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">Comment Data</label>
+                                                {{ review_form.comment }}
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit Record</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="alert text-center mb-5" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.3); border-radius: 16px;">
+                                    <span style="color: var(--secondary-neon);">✓ Feedback transmitted successfully.</span>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert text-center mb-5" style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 16px; color: var(--text-secondary);">
+                                System restriction: Self-feedback disabled.
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert text-center mb-5" style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 16px;">
+                            Please <a href="{% url 'login' %}?next={{ request.path }}" style="color: var(--primary-neon);">authenticate</a> to transmit feedback.
+                        </div>
+                    {% endif %}
+
+                    {% if skill.reviews.all %}
+                        {% for review in skill.reviews.all %}
+                            <div class="card mb-3 border-0" style="background: rgba(255,255,255,0.03);">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="user-badge" style="background: transparent; border-color: rgba(255,255,255,0.1); padding: 4px 10px;">
+                                            <span>👤</span> <span style="color: white; font-weight: 600; margin-left: 4px;">{{ review.user.username }}</span>
+                                        </div>
+                                        <div style="background: rgba(255, 193, 7, 0.1); padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255, 193, 7, 0.3);">
+                                            <span style="color: #ffc107; font-size: 0.8rem; letter-spacing: 2px;">
+                                                {% for i in "12345"|make_list %}
+                                                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                                                {% endfor %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0" style="color: #cbd5e1; font-weight: 300;">"{{ review.comment }}"</p>
+                                    <div class="mt-3 text-end">
+                                        <span class="text-muted" style="font-size: 0.7rem; font-family: monospace;">T-STAMP: {{ review.created_at|date:"Y.m.d-H:i" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4 text-muted" style="border: 1px dashed rgba(255,255,255,0.1); border-radius: 16px;">
+                            No feedback records found.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Profile Card -->
+        <div class="card mt-4 d-lg-none border-0" style="background: rgba(255,255,255,0.02);">
+            <div class="card-header border-bottom border-secondary" style="background: transparent;">
+                <h5 class="mb-0 text-white" style="font-weight: 700;">Entity Profile</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="text-white">{{ skill.owner.get_full_name|default:skill.owner.username }}</h5>
+                <p class="text-muted mb-0 font-monospace small">ID: @{{ skill.owner.username }}</p>
+                <p class="text-muted small">Active since {{ skill.owner.date_joined|date:"F Y" }}</p>
+                <div class="mt-3 p-3 rounded-3" style="background: rgba(255,255,255,0.05);">
+                    <p class="text-muted mb-0 text-center">
+                        <strong class="text-white fs-5">{{ skill.owner.skills.count }}</strong>
+                        <br>Broadcasts
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar - Contact and Owner Info -->
+    <div class="col-lg-4">
+        <!-- Contact Information Card -->
+        <div class="card sticky-top border-0 mb-4" style="top: 100px; background: rgba(255,255,255,0.02);">
+            <div class="card-header border-bottom border-secondary" style="background: transparent;">
+                <h5 class="mb-0 text-white" style="font-weight: 700;">Communication Link</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4 p-3 rounded-3 text-center" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                    <span class="d-block text-muted small text-uppercase mb-1" style="letter-spacing: 1px;">Protocol</span>
+                    <strong class="text-white fs-5">{{ skill.get_contact_preference_display }}</strong>
+                </div>
+
+                {% if user.is_authenticated %}
+                    {% if user != skill.owner %}
+                    <a href="{% url 'skill_request' skill.pk %}" class="btn btn-primary w-100 mb-3" style="box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
+                        ⚡ Request Session
+                    </a>
+                    {% endif %}
+                {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary w-100 mb-3">
+                    Initialize Link
+                </a>
+                {% endif %}
+
+                <button class="btn btn-outline-light w-100 mb-3" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    View Comm Method
+                </button>
+
+                <a href="#" class="btn btn-outline-light w-100">
+                    Scan Entity Data
+                </a>
+            </div>
+        </div>
+
+        <!-- Desktop Profile Card -->
+        <div class="card d-none d-lg-block border-0 mb-4" style="background: rgba(255,255,255,0.02);">
+            <div class="card-header border-bottom border-secondary" style="background: transparent;">
+                <h5 class="mb-0 text-white" style="font-weight: 700;">Entity Profile</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="text-white">{{ skill.owner.get_full_name|default:skill.owner.username }}</h5>
+                <p class="text-muted mb-0 font-monospace small">ID: @{{ skill.owner.username }}</p>
+                <p class="text-muted small mb-4">Active since {{ skill.owner.date_joined|date:"F Y" }}</p>
+                <div class="p-3 rounded-3 text-center" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);">
+                    <strong class="text-white fs-4">{{ skill.owner.skills.count }}</strong>
+                    <br><span class="text-muted small text-uppercase" style="letter-spacing: 1px;">Broadcasts</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="background: #111; box-shadow: 0 0 50px rgba(0,0,0,0.5);">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title text-white" style="font-weight: 700;">Secure Comms: @{{ skill.owner.username }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                {% if user.is_authenticated %}
+                <p class="text-muted">Target acquired: <strong>{{ skill.title }}</strong>.</p>
+                
+                <div class="p-3 mb-4 rounded-3" style="background: rgba(255,255,255,0.05);">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small text-uppercase">Method</span>
+                        <span class="text-white fw-bold">{{ skill.get_contact_preference_display }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small text-uppercase">Status</span>
+                        <span class="text-success fw-bold">{{ skill.get_availability_display }}</span>
+                    </div>
+                </div>
+                
+                <div class="alert text-center mb-0" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.3); color: var(--secondary-neon); font-size: 0.9rem;">
+                    Transmission protocol requires external software.<br>Use the provided method to initiate contact.
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🔒</div>
+                    <p class="text-white mb-4">Authentication required to establish link.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary mb-2 w-100">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light w-100">Register</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 text-center">
+    <a href="{% url 'skill_list' %}" class="btn btn-outline-light" style="border-radius: 999px;">
+        ← Terminate Link & Return
+    </a>
+</div>
+{% endblock %}

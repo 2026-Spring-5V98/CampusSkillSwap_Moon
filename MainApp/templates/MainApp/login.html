@@ -1,0 +1,110 @@
+{% extends 'MainApp/base.html' %}
+
+{% block title %}System Access - Campus Skillswap{% endblock %}
+
+{% block content %}
+<div class="row align-items-center" style="min-height: 70vh;">
+    <div class="col-lg-5 offset-lg-1 mb-5 mb-lg-0">
+        <!-- Login Form -->
+        <div class="card border-0" style="background: rgba(255,255,255,0.02); box-shadow: 0 0 40px rgba(0, 229, 255, 0.05); position: relative; overflow: visible;">
+            <!-- Decorative Glow -->
+            <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, var(--secondary-neon), transparent 70%); opacity: 0.3; filter: blur(20px); border-radius: 50%; z-index: -1;"></div>
+            
+            <div class="card-header text-center border-0 pt-5 pb-0" style="background: transparent;">
+                <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Access Node</h2>
+                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Authenticate Identity</p>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label for="username" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">ID String *</label>
+                        <input type="text" name="username" id="username" class="form-control form-control-lg" placeholder="Enter your ID" required autofocus style="border-radius: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="password" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">Security Key *</label>
+                        <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter passkey" required style="border-radius: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" style="border-radius: 12px; box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
+                        Initialize Connection
+                    </button>
+
+                    <div class="text-center">
+                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">
+                            No access vector?
+                            <a href="{% url 'register' %}" style="color: var(--secondary-neon); text-decoration: none; font-weight: 600;">Create Profile</a>
+                        </p>
+                    </div>
+                </form>
+
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+
+                <div class="text-center">
+                    <p class="text-muted mb-3 small text-uppercase" style="letter-spacing: 1px;">Guest Access</p>
+                    <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-sm" style="border-radius: 999px;">
+                        Scan Public Database
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Sidebar -->
+    <div class="col-lg-5 ps-lg-5">
+        <div class="p-4 rounded-4" style="background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent); border: 1px solid rgba(255,255,255,0.05);">
+            <h3 class="mb-5" style="font-weight: 800; font-size: 2rem;">Grid Privileges</h3>
+
+            <div class="d-flex align-items-start mb-4">
+                <div style="width: 40px; height: 40px; background: rgba(112, 0, 255, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; border: 1px solid rgba(112, 0, 255, 0.3); color: #b580ff;">📡</div>
+                <div>
+                    <h6 class="text-white mb-1 fw-bold">Broadcast Skills</h6>
+                    <p class="text-muted small mb-0">Upload your expertise to the global network.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-4">
+                <div style="width: 40px; height: 40px; background: rgba(0, 229, 255, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; border: 1px solid rgba(0, 229, 255, 0.3); color: var(--secondary-neon);">⚡</div>
+                <div>
+                    <h6 class="text-white mb-1 fw-bold">Direct P2P Link</h6>
+                    <p class="text-muted small mb-0">Initiate direct contact with other connected entities.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-4">
+                <div style="width: 40px; height: 40px; background: rgba(255, 0, 85, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; border: 1px solid rgba(255, 0, 85, 0.3); color: var(--accent-glow);">⭐</div>
+                <div>
+                    <h6 class="text-white mb-1 fw-bold">Reputation Protocol</h6>
+                    <p class="text-muted small mb-0">Leave feedback and build your network trust score.</p>
+                </div>
+            </div>
+            
+            <div class="mt-5 p-3 rounded-3" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.2);">
+                <div class="d-flex align-items-center">
+                    <span style="font-size: 1.5rem; margin-right: 10px; opacity: 0.7;">🔒</span>
+                    <p class="mb-0 text-muted small" style="font-family: monospace;">Connection encrypted. Identity protocols enforced via secure cryptographic hashing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        const form = document.querySelector('.needs-validation');
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }
+    })();
+</script>
+{% endblock %}

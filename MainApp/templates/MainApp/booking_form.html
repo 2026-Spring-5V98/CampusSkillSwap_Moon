@@ -1,0 +1,65 @@
+{% extends 'MainApp/base.html' %}
+
+{% block title %}Initiate Handshake - Campus Skillswap{% endblock %}
+
+{% block content %}
+<div class="row align-items-center" style="min-height: 70vh;">
+    <div class="col-lg-6 offset-lg-3">
+        <div class="card border-0" style="background: rgba(255,255,255,0.02); box-shadow: 0 0 40px rgba(0, 229, 255, 0.05); position: relative; overflow: visible;">
+            <!-- Decorative Glow -->
+            <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, var(--secondary-neon), transparent 70%); opacity: 0.3; filter: blur(20px); border-radius: 50%; z-index: -1;"></div>
+            
+            <div class="card-header text-center border-0 pt-5 pb-0" style="background: transparent;">
+                <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Initiate Handshake</h2>
+                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Request Session for "{{ skill.title }}"</p>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <div class="p-3 mb-4 rounded-3" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.2);">
+                    <p class="mb-0 text-muted small">Target Instructor: <strong class="text-white">{{ skill.owner.username }}</strong></p>
+                </div>
+
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label for="{{ form.message.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">Transmission Message *</label>
+                        {{ form.message }}
+                        <div class="form-text text-muted mt-2" style="font-size: 0.8rem; opacity: 0.6;">
+                            Introduce yourself and explain your objectives for this knowledge transfer.
+                        </div>
+                        {% if form.message.errors %}
+                        <div class="text-danger mt-2 small">
+                            {{ form.message.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <button type="submit" class="btn btn-primary btn-lg" style="box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
+                            Transmit Request
+                        </button>
+                        <a href="{% url 'skill_detail' skill.pk %}" class="btn btn-outline-light">
+                            Abort Connection
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-body textarea {
+        border-radius: 12px !important; 
+        background: rgba(0,0,0,0.4) !important; 
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: white !important;
+        padding: 0.8rem 1.2rem !important;
+    }
+    .card-body textarea:focus {
+        border-color: var(--secondary-neon) !important;
+        box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.15) !important;
+    }
+</style>
+{% endblock %}
