@@ -1,6 +1,6 @@
 {% extends 'MainApp/base.html' %}
 
-{% block title %}Create Profile - Campus Skillswap{% endblock %}
+{% block title %}Join the Community - Campus Skillswap{% endblock %}
 
 {% block content %}
 <div class="row align-items-center" style="min-height: 70vh;">
@@ -11,8 +11,8 @@
             <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: radial-gradient(circle, var(--primary-neon), transparent 70%); opacity: 0.3; filter: blur(20px); border-radius: 50%; z-index: -1;"></div>
             
             <div class="card-header text-center border-0 pt-5 pb-0" style="background: transparent;">
-                <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Initialize Profile</h2>
-                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Establish Network Connection</p>
+                <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Create Your Account</h2>
+                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Join Campus Skillswap</p>
             </div>
             
             <div class="card-body p-4 p-md-5">
@@ -41,13 +41,13 @@
                     {% endfor %}
 
                     <button type="submit" class="btn btn-primary btn-lg w-100 mt-3 mb-4" style="border-radius: 12px; box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
-                        Execute Registration
+                        Sign Up
                     </button>
 
                     <div class="text-center">
                         <p class="mb-0 text-muted" style="font-size: 0.9rem;">
-                            Profile established?
-                            <a href="{% url 'login' %}" style="color: var(--primary-neon); text-decoration: none; font-weight: 600;">Initialize Login</a>
+                            Already have an account?
+                            <a href="{% url 'login' %}" style="color: var(--primary-neon); text-decoration: none; font-weight: 600;">Log In</a>
                         </p>
                     </div>
                 </form>

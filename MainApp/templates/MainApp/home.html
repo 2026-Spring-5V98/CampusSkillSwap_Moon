@@ -1,6 +1,6 @@
 {% extends 'MainApp/base.html' %}
 
-{% block title %}Nexus - Campus Skillswap{% endblock %}
+{% block title %}Community - Campus Skillswap{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -9,17 +9,17 @@
         <div class="row align-items-center">
             <div class="col-lg-8 mx-auto text-center">
                 <div class="mb-4" style="display: inline-block; padding: 6px 16px; border-radius: 999px; background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3); color: var(--secondary-neon); font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">
-                    <span style="display: inline-block; width: 8px; height: 8px; background: var(--secondary-neon); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 10px var(--secondary-neon);"></span> Network Online
+                    <span style="display: inline-block; width: 8px; height: 8px; background: var(--secondary-neon); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 10px var(--secondary-neon);"></span> Students Online
                 </div>
-                <h1>Upgrade Your Reality.</h1>
-                <p>Connect with the campus neural net. Exchange skills, acquire knowledge, and elevate your potential.</p>
+                <h1>Master New Skills Together.</h1>
+                <p>Join your campus community to trade skills, learn from peers, and grow your potential.</p>
                 <div class="mt-5 d-flex justify-content-center gap-3">
                     {% if not user.is_authenticated %}
-                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Initialize Protocol</a>
-                    <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-lg">Access Grid</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Join the Community</a>
+                    <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-lg">Browse Skills</a>
                     {% else %}
-                    <a href="{% url 'skill_create' %}" class="btn btn-primary btn-lg">Broadcast Skill</a>
-                    <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-lg">Access Grid</a>
+                    <a href="{% url 'skill_create' %}" class="btn btn-primary btn-lg">Share a Skill</a>
+                    <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-lg">Browse Skills</a>
                     {% endif %}
                 </div>
             </div>
@@ -30,8 +30,8 @@
 <!-- Featured Skills Section -->
 <div class="container" style="position: relative; z-index: 10;">
     <div class="d-flex justify-content-between align-items-end mb-4">
-        <h2 style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px;">Trending Uploads</h2>
-        <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-sm" style="border-radius: 999px;">View Database →</a>
+        <h2 style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px;">Trending Skills</h2>
+        <a href="{% url 'skill_list' %}" class="btn btn-outline-light btn-sm" style="border-radius: 999px;">Explore All →</a>
     </div>
 
     {% if skills %}
@@ -66,7 +66,7 @@
                         {% if skill.is_free %}
                         <span class="text-success" style="text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">FREE</span>
                         {% else %}
-                        ${{ skill.price }}<span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;">/cycle</span>
+                        ${{ skill.price }}<span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;">/session</span>
                         {% endif %}
                     </div>
 
@@ -84,7 +84,7 @@
 
                         <!-- View Details Button -->
                         <a href="{% url 'skill_detail' skill.pk %}" class="btn btn-outline-light btn-sm" style="border-radius: 999px;">
-                            Inspect
+                            View Details
                         </a>
                     </div>
                 </div>
@@ -96,12 +96,12 @@
     <!-- Empty State -->
     <div class="alert text-center py-5" style="background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--surface-border); border-radius: 24px; backdrop-filter: blur(10px);">
         <div style="font-size: 4rem; opacity: 0.5; margin-bottom: 20px;">📡</div>
-        <h4 class="text-white" style="font-weight: 700;">No Signal Detected</h4>
-        <p class="text-muted mb-4">The grid is empty. Be the first to establish a connection.</p>
+        <h4 class="text-white" style="font-weight: 700;">No Skills Found</h4>
+        <p class="text-muted mb-4">The community is just getting started. Be the first to share a skill!</p>
         {% if user.is_authenticated %}
-        <a href="{% url 'skill_create' %}" class="btn btn-primary">Broadcast Skill</a>
+        <a href="{% url 'skill_create' %}" class="btn btn-primary">Share a Skill</a>
         {% else %}
-        <a href="{% url 'register' %}" class="btn btn-primary">Initialize Protocol</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Join the Community</a>
         {% endif %}
     </div>
     {% endif %}
@@ -109,14 +109,14 @@
 
 <!-- Info Cards Section -->
 <div class="container mt-5 mb-5" style="padding-top: 80px;">
-    <h2 class="mb-5 text-center" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px;">System Architecture</h2>
+    <h2 class="mb-5 text-center" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px;">How Skillswap Works</h2>
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card border-0 text-center h-100" style="background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);">
                 <div class="card-body py-5">
                     <div style="width: 80px; height: 80px; background: rgba(112, 0, 255, 0.2); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; font-size: 2.5rem; border: 1px solid rgba(112, 0, 255, 0.4); box-shadow: 0 0 30px rgba(112, 0, 255, 0.2);">📡</div>
-                    <h4 class="text-white mb-3" style="font-weight: 700;">1. Broadcast</h4>
-                    <p class="text-muted font-weight-light">Upload your skillset to the nexus. Define your parameters and await incoming connections.</p>
+                    <h4 class="text-white mb-3" style="font-weight: 700;">1. Share</h4>
+                    <p class="text-muted font-weight-light">List the skills you can teach. Set your terms and wait for students to reach out.</p>
                 </div>
             </div>
         </div>
@@ -124,8 +124,8 @@
             <div class="card border-0 text-center h-100" style="background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);">
                 <div class="card-body py-5">
                     <div style="width: 80px; height: 80px; background: rgba(0, 229, 255, 0.2); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; font-size: 2.5rem; border: 1px solid rgba(0, 229, 255, 0.4); box-shadow: 0 0 30px rgba(0, 229, 255, 0.2);">🔍</div>
-                    <h4 class="text-white mb-3" style="font-weight: 700;">2. Scan Grid</h4>
-                    <p class="text-muted font-weight-light">Navigate the database. Isolate the exact knowledge transfer you require from your peers.</p>
+                    <h4 class="text-white mb-3" style="font-weight: 700;">2. Discover</h4>
+                    <p class="text-muted font-weight-light">Browse the community. Find the exact skills you want to learn from fellow students.</p>
                 </div>
             </div>
         </div>
@@ -133,8 +133,8 @@
             <div class="card border-0 text-center h-100" style="background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);">
                 <div class="card-body py-5">
                     <div style="width: 80px; height: 80px; background: rgba(255, 0, 85, 0.2); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; font-size: 2.5rem; border: 1px solid rgba(255, 0, 85, 0.4); box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);">⚡</div>
-                    <h4 class="text-white mb-3" style="font-weight: 700;">3. Sync</h4>
-                    <p class="text-muted font-weight-light">Establish a secure link. Execute the peer-to-peer skill exchange protocol.</p>
+                    <h4 class="text-white mb-3" style="font-weight: 700;">3. Connect</h4>
+                    <p class="text-muted font-weight-light">Connect with your peer and start your skill exchange session.</p>
                 </div>
             </div>
         </div>

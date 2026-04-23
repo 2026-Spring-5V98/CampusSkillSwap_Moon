@@ -3,9 +3,9 @@
 
 {% block title %}
 {% if form.instance.pk %}
-Modify Broadcast "{{ form.instance.title }}" - Campus Skillswap
+Edit Skill "{{ form.instance.title }}" - Campus Skillswap
 {% else %}
-Initiate New Broadcast - Campus Skillswap
+Share a New Skill - Campus Skillswap
 {% endif %}
 {% endblock %}
 
@@ -16,23 +16,23 @@ Initiate New Broadcast - Campus Skillswap
             <div class="card-header border-bottom border-secondary pt-5 pb-4 px-4 px-lg-5" style="background: transparent;">
                 <h2 class="mb-0" style="font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     {% if form.instance.pk %}
-                    Modify Skill Parameters
+                    Edit Skill Details
                     {% else %}
-                    Initialize Broadcast
+                    Share Your Skill
                     {% endif %}
                 </h2>
-                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Define Skillset Metadata</p>
+                <p class="text-muted mt-2 small text-uppercase" style="letter-spacing: 1px;">Tell us about your skill</p>
             </div>
             
             <div class="card-body p-4 p-lg-5">
                 <!-- Form Instructions -->
                 <div class="p-4 rounded-4 mb-5" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.2);">
-                    <h5 style="color: var(--secondary-neon); font-weight: 700;" class="mb-3">💡 Transmission Guidelines:</h5>
+                    <h5 style="color: var(--secondary-neon); font-weight: 700;" class="mb-3">💡 Sharing Guidelines:</h5>
                     <ul class="mb-0 text-muted small" style="list-style-type: '⚡ '; padding-left: 20px;">
-                        <li class="mb-2">Define clear parameters for your peer-to-peer exchange.</li>
-                        <li class="mb-2">Specify your expertise level in the data payload.</li>
-                        <li class="mb-2">Ensure your valuation (pricing) is network-standard.</li>
-                        <li>Maintain your status signal for accurate grid detection.</li>
+                        <li class="mb-2">Define clear details for your skill swap.</li>
+                        <li class="mb-2">Specify your expertise level in the description.</li>
+                        <li class="mb-2">Ensure your price is fair for the community.</li>
+                        <li>Update your status so others can find you.</li>
                     </ul>
                 </div>
 
@@ -43,11 +43,11 @@ Initiate New Broadcast - Campus Skillswap
                     <!-- Title Field -->
                     <div class="mb-5">
                         <label for="{{ form.title.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
-                            📌 Designation *
+                            📌 Skill Name *
                         </label>
                         {{ form.title }}
                         <div class="form-text text-muted mt-2" style="font-size: 0.8rem; opacity: 0.6;">
-                            Identifier for the skill. Example: "Advanced Neural Net Architect"
+                            Give your skill a clear name. Example: "Math Tutoring" or "Graphic Design"
                         </div>
                         {% if form.title.errors %}
                         <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
@@ -59,11 +59,11 @@ Initiate New Broadcast - Campus Skillswap
                     <!-- Description Field -->
                     <div class="mb-5">
                         <label for="{{ form.description.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
-                            📝 Data Payload *
+                            📝 Description *
                         </label>
                         {{ form.description }}
                         <div class="form-text text-muted mt-2" style="font-size: 0.8rem; opacity: 0.6;">
-                            Describe the core knowledge transfer protocols.
+                            Describe what you will teach or share.
                         </div>
                         {% if form.description.errors %}
                         <div class="text-danger mt-2 small" style="color: var(--accent-glow) !important;">
@@ -74,7 +74,7 @@ Initiate New Broadcast - Campus Skillswap
 
                     <!-- Category Field -->
                     <div class="mb-5">
-                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📂 Logic Sector *</label>
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📂 Category *</label>
                         <div class="row g-3">
                             {% for value, label in form.category.field.choices %}
                             <div class="col-md-6">
@@ -99,14 +99,14 @@ Initiate New Broadcast - Campus Skillswap
 
                     <!-- Pricing Section -->
                     <div class="p-4 rounded-4 mb-5" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-                        <h5 class="mb-4 text-white" style="font-weight: 700;">💰 Valuation Model</h5>
+                        <h5 class="mb-4 text-white" style="font-weight: 700;">💰 Pricing</h5>
 
                         <!-- Free Option -->
                         <div class="mb-4">
                             <div class="form-check form-switch">
                                 {{ form.is_free }}
                                 <label class="form-check-label text-muted" for="{{ form.is_free.id_for_label }}">
-                                    Open-Source (Free Exchange)
+                                    Free (Skill Swap)
                                 </label>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ Initiate New Broadcast - Campus Skillswap
                         <!-- Price Field -->
                         <div id="priceField">
                             <label for="{{ form.price.id_for_label }}" class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">
-                                Network Credits / Session
+                                Price / Session
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text border-0" style="background: rgba(0,0,0,0.4); color: var(--secondary-neon);">$</span>
@@ -130,7 +130,7 @@ Initiate New Broadcast - Campus Skillswap
 
                     <!-- Contact Preference -->
                     <div class="mb-5">
-                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📧 Comm Protocol *</label>
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📧 Contact Method *</label>
                         <div class="row g-3">
                             {% for value, label in form.contact_preference.field.choices %}
                             <div class="col-md-6">
@@ -152,7 +152,7 @@ Initiate New Broadcast - Campus Skillswap
 
                     <!-- Availability Status -->
                     <div class="mb-5">
-                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📅 Network Presence *</label>
+                        <label class="form-label text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">📅 Availability *</label>
                         <div class="row g-3">
                             {% for value, label in form.availability.field.choices %}
                             <div class="col-md-4">
@@ -175,20 +175,20 @@ Initiate New Broadcast - Campus Skillswap
                     <!-- Form Errors (General) -->
                     {% if form.non_field_errors %}
                     <div class="alert mb-5" style="background: rgba(255, 0, 85, 0.1); border: 1px solid rgba(255, 0, 85, 0.3); border-radius: 12px; color: var(--accent-glow);">
-                        <strong>System Error:</strong> {{ form.non_field_errors }}
+                        <strong>Error:</strong> {{ form.non_field_errors }}
                     </div>
                     {% endif %}
 
                     <!-- Submit Buttons -->
                     <div class="d-grid gap-3 d-md-flex justify-content-md-end mt-5">
                         <a href="{% url 'dashboard' %}" class="btn btn-outline-light px-5" style="border-radius: 12px;">
-                            Abort
+                            Cancel
                         </a>
                         <button type="submit" class="btn btn-primary px-5" style="border-radius: 12px; box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
                             {% if form.instance.pk %}
-                            Sync Changes
+                            Save Changes
                             {% else %}
-                            Execute Broadcast
+                            Share Skill
                             {% endif %}
                         </button>
                     </div>

@@ -1,7 +1,7 @@
 {% extends 'MainApp/base.html' %}
 {% load custom_filters %}
 
-{% block title %}Control Panel - Campus Skillswap{% endblock %}
+{% block title %}Dashboard - Campus Skillswap{% endblock %}
 
 {% block content %}
 <!-- Dashboard Header -->
@@ -10,11 +10,11 @@
         <h1 style="font-weight: 900; font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
             Welcome, {{ user.get_full_name|default:user.username }}.
         </h1>
-        <p class="text-muted" style="font-size: 1.2rem; font-weight: 300;">Manage your neural links and track your network activity.</p>
+        <p class="text-muted" style="font-size: 1.2rem; font-weight: 300;">Manage your connections and track your activity.</p>
     </div>
     <div class="col-lg-4 text-lg-end d-flex align-items-center justify-content-lg-end">
         <a href="{% url 'skill_create' %}" class="btn btn-primary btn-lg" style="box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);">
-            + Broadcast Skill
+            + Share a Skill
         </a>
     </div>
 </div>
@@ -24,7 +24,7 @@
     <div class="col-md-3">
         <div class="card text-center border-0 h-100" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05) !important;">
             <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-bold mb-2">Broadcasts</p>
+                <p class="text-muted text-uppercase small fw-bold mb-2">My Skills</p>
                 <h3 class="text-white mb-0">{{ skill_count }}</h3>
             </div>
         </div>
@@ -48,7 +48,7 @@
     <div class="col-md-3">
         <div class="card text-center border-0 h-100" style="background: rgba(255, 0, 85, 0.05); border: 1px solid rgba(255, 0, 85, 0.1) !important;">
             <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-bold mb-2">Session Acc.</p>
+                <p class="text-muted text-uppercase small fw-bold mb-2">Member Since</p>
                 <h3 style="color: var(--accent-glow);" class="mb-0">{{ user.date_joined|date:"M y" }}</h3>
             </div>
         </div>
@@ -100,7 +100,7 @@
             {% endfor %}
         {% else %}
             <div class="p-4 text-center rounded-4" style="background: rgba(255,255,255,0.01); border: 1px dashed rgba(255,255,255,0.05);">
-                <p class="text-muted mb-0 small">No incoming handshake requests.</p>
+                <p class="text-muted mb-0 small">No incoming skill swap requests.</p>
             </div>
         {% endif %}
     </div>
@@ -126,7 +126,7 @@
                     
                     {% if request.status == 'accepted' %}
                     <div class="alert small mb-0 py-2" style="background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2); color: var(--secondary-neon);">
-                        Handshake accepted! Contact via: {{ request.skill.get_contact_preference_display }}
+                        Request accepted! Contact via: {{ request.skill.get_contact_preference_display }}
                     </div>
                     {% endif %}
                 </div>
@@ -143,7 +143,7 @@
 <!-- Active Broadcasts -->
 <div class="d-flex align-items-center mb-4">
     <div style="width: 12px; height: 12px; background: var(--primary-neon); border-radius: 50%; margin-right: 12px; box-shadow: 0 0 15px var(--primary-neon);"></div>
-    <h2 class="mb-0" style="font-weight: 800; font-size: 2rem; letter-spacing: -1px;">System Broadcasts</h2>
+    <h2 class="mb-0" style="font-weight: 800; font-size: 2rem; letter-spacing: -1px;">My Shared Skills</h2>
 </div>
 
 {% if user_skills %}
@@ -161,10 +161,10 @@
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="d-flex gap-2">
-                        <a href="{% url 'skill_edit' skill.pk %}" class="btn btn-outline-warning btn-sm py-1 px-3" style="font-size: 0.75rem;">Modify</a>
-                        <a href="{% url 'skill_delete' skill.pk %}" class="btn btn-outline-danger btn-sm py-1 px-3" style="font-size: 0.75rem;">Purge</a>
+                        <a href="{% url 'skill_edit' skill.pk %}" class="btn btn-outline-warning btn-sm py-1 px-3" style="font-size: 0.75rem;">Edit</a>
+                        <a href="{% url 'skill_delete' skill.pk %}" class="btn btn-outline-danger btn-sm py-1 px-3" style="font-size: 0.75rem;">Delete</a>
                     </div>
-                    <a href="{% url 'skill_detail' skill.pk %}" class="btn btn-outline-light btn-sm py-1 px-3" style="font-size: 0.75rem;">View</a>
+                    <a href="{% url 'skill_detail' skill.pk %}" class="btn btn-outline-light btn-sm py-1 px-3" style="font-size: 0.75rem;">View Details</a>
                 </div>
             </div>
         </div>
@@ -175,7 +175,8 @@
 
 <div class="mt-5 text-center">
     <a href="{% url 'logout' %}" class="btn btn-outline-danger" style="border-radius: 999px;">
-        Terminate Session
+        Logout
     </a>
 </div>
 {% endblock %}
+
